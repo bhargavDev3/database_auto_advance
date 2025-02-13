@@ -8,9 +8,9 @@
     <OverwriteDataSources>False</OverwriteDataSources>
     <TargetServerVersion>SSRS2016</TargetServerVersion>
     <Platform>Win32</Platform>
-    <TargetReportFolder>/DemoReports2/RDLS</TargetReportFolder>
+    <TargetReportFolder>/Hallmark/RDLS</TargetReportFolder>
     <TargetDatasetFolder>Datasets</TargetDatasetFolder>
-    <TargetDatasourceFolder>/DemoReports2/DS</TargetDatasourceFolder>
+    <TargetDatasourceFolder>/Hallmark/DS</TargetDatasourceFolder>
     <TargetReportPartFolder>Report Parts</TargetReportPartFolder>
     <TargetServerURL>http://hallmark2/Reports</TargetServerURL>
   </PropertyGroup>
@@ -22,9 +22,9 @@
     <OverwriteDataSources>False</OverwriteDataSources>
     <TargetServerVersion>SSRS2016</TargetServerVersion>
     <Platform>Win32</Platform>
-    <TargetReportFolder>/DemoReports2/RDLS</TargetReportFolder>
+    <TargetReportFolder>/Hallmark/RDLS</TargetReportFolder>
     <TargetDatasetFolder>Datasets</TargetDatasetFolder>
-    <TargetDatasourceFolder>/DemoReports2/DS</TargetDatasourceFolder>
+    <TargetDatasourceFolder>/Hallmark/DS</TargetDatasourceFolder>
     <TargetReportPartFolder>Report Parts</TargetReportPartFolder>
     <TargetServerURL>http://hallmark2/Reports</TargetServerURL>
   </PropertyGroup>
@@ -36,9 +36,9 @@
     <OverwriteDataSources>False</OverwriteDataSources>
     <TargetServerVersion>SSRS2016</TargetServerVersion>
     <Platform>Win32</Platform>
-    <TargetReportFolder>/DemoReports2/RDLS</TargetReportFolder>
+    <TargetReportFolder>/Hallmark/RDLS</TargetReportFolder>
     <TargetDatasetFolder>Datasets</TargetDatasetFolder>
-    <TargetDatasourceFolder>/DemoReports2/DS</TargetDatasourceFolder>
+    <TargetDatasourceFolder>/Hallmark/DS</TargetDatasourceFolder>
     <TargetReportPartFolder>Report Parts</TargetReportPartFolder>
     <TargetServerURL>http://hallmark2/Reports</TargetServerURL>
   </PropertyGroup>

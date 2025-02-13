@@ -20,6 +20,11 @@ def execute_sql_scripts(server, username, password, database, base_dir, start_ye
     # Get all year folders sorted (e.g., "2024", "2025", "2026" ...)
     year_folders = sorted(os.listdir(base_dir))
 
+    success_count = 0
+    fail_count = 0
+    paths_successful = []
+    paths_failed = []
+
     for year_folder in year_folders:
         year_path = os.path.join(base_dir, year_folder)
 
@@ -85,11 +90,17 @@ def execute_sql_scripts(server, username, password, database, base_dir, start_ye
                         # Execute the SQL script
                         cursor.execute(sql_script)
                         conn.commit()
+                        success_count += 1
+                        paths_successful.append(sql_file_path)
                         print(f"Executed {sql_file} successfully")
                     except Exception as e:
-                        print(f"Error executing {sql_file}: {e}")
                         conn.rollback()
+                        fail_count += 1
+                        paths_failed.append(sql_file_path)
+                        print(f"Error executing {sql_file}: {e}")
 
     cursor.close()
     conn.close()
     print("Connection closed.")
+
+    return success_count, fail_count, paths_successful, paths_failed

@@ -82,6 +82,11 @@ def rebuild_and_deploy_solution(sln_path, vs_path):
 
 def deploy_rdl_files(rdl_files, client_name, username, password, report_server_url):
     """Uploads RDL files to SSRS via HTTP PUT request."""
+    success_count = 0
+    fail_count = 0
+    paths_successful = []
+    paths_failed = []
+
     for rdl_file in rdl_files:
         report_name = os.path.basename(rdl_file).replace('.rdl', '')
         target_folder = f"/{client_name}/RDLS"
@@ -96,16 +101,29 @@ def deploy_rdl_files(rdl_files, client_name, username, password, report_server_u
                     auth=HttpNtlmAuth(username, password)
                 )
                 if response.status_code == 200:
+                    success_count += 1
+                    paths_successful.append(rdl_file)
                     print(f"Successfully deployed {report_name} to {target_folder}")
                 else:
+                    fail_count += 1
+                    paths_failed.append(rdl_file)
                     print(f"Failed to deploy {report_name}: {response.status_code} - {response.text}")
             except Exception as e:
+                fail_count += 1
+                paths_failed.append(rdl_file)
                 print(f"Error deploying {report_name}: {e}")
+
+    return success_count, fail_count, paths_successful, paths_failed
 
 def process_folder(folder_path, client_name, vs_path, report_server_url, new_data_source, database, report_user, report_password):
     """Processes all subdirectories inside a date folder for .sln files."""
     subfolders = sorted([os.path.join(folder_path, d) for d in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, d))])
     
+    success_count = 0
+    fail_count = 0
+    paths_successful = []
+    paths_failed = []
+
     for subfolder in subfolders:
         sln_files = find_solution_files(subfolder)
         if not sln_files:
@@ -126,13 +144,24 @@ def process_folder(folder_path, client_name, vs_path, report_server_url, new_dat
                 update_rds_file(rds_file, new_data_source, database)
 
             if rebuild_and_deploy_solution(sln_file, vs_path):
-                deploy_rdl_files(rdl_files, client_name, report_user, report_password, report_server_url)
+                success, fail, paths_success, paths_fail = deploy_rdl_files(rdl_files, client_name, report_user, report_password, report_server_url)
+                success_count += success
+                fail_count += fail
+                paths_successful.extend(paths_success)
+                paths_failed.extend(paths_fail)
+
+    return success_count, fail_count, paths_successful, paths_failed
 
 def execute_rdl_deployment(base_dir, start_year, start_month, start_date, client_name, vs_path, report_user, report_password, report_server_url, new_data_source, database):
     """Processes all folders from START_YEAR/START_MONTH/START_DATE onward."""
     start_processing = False
 
     year_folders = sorted(os.listdir(base_dir))
+
+    success_count = 0
+    fail_count = 0
+    paths_successful = []
+    paths_failed = []
 
     for year_folder in year_folders:
         year_path = os.path.join(base_dir, year_folder)
@@ -175,4 +204,10 @@ def execute_rdl_deployment(base_dir, start_year, start_month, start_date, client
                     continue
 
                 print(f"Processing: {date_path}")
-                process_folder(date_path, client_name, vs_path, report_server_url, new_data_source, database, report_user, report_password)
+                success, fail, paths_success, paths_fail = process_folder(date_path, client_name, vs_path, report_server_url, new_data_source, database, report_user, report_password)
+                success_count += success
+                fail_count += fail
+                paths_successful.extend(paths_success)
+                paths_failed.extend(paths_fail)
+
+    return success_count, fail_count, paths_successful, paths_failed

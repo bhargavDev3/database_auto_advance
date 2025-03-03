@@ -1,7 +1,7 @@
 import sql
 import rdl
 import pyttsx3
-from log_utils import create_log_file, write_log, close_log_file
+from db_log_utils import create_log_file, write_log, close_log_file
 
 # Define the engine to specify which scripts to run
 engine = ("sql", "rdl")  # Options: ("sql", "rdl"), ("sql"), ("rdl")
@@ -42,16 +42,7 @@ REPORT_SERVER_URL = "http://hallmark2/Reports"
 NEW_DATA_SOURCE = "HALLMARK2"
 database_rdl = DataBase  # Shared between sql.py and rdl.py
 
-# Initialize voice engine
-Spell = pyttsx3.init()
 
-# Function to play voice alert
-def play_voice_alert(client_name):
-    voice_message = f"Hi sir, The Deployment of {client_name} completed Successfully"
-    Spell.setProperty('volume', 1)
-    Spell.setProperty('rate', 125)
-    Spell.say(voice_message)
-    Spell.runAndWait()
 
 if __name__ == "__main__":
     # Create the log file
@@ -88,6 +79,3 @@ if __name__ == "__main__":
 
     # Close the log file
     close_log_file(log_file)
-
-    # Play voice alert after deployment
-    play_voice_alert(CLIENT_NAME)
